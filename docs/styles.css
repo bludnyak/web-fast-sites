@@ -432,6 +432,17 @@ h3 {
   font-weight: 800;
   letter-spacing: -0.02em;
 }
+/* PROJECT SCREENS */
+.work__thumb--iss {
+  background-image: url("./assets/projects/isstudio.webp");
+}
+.work__thumb--topworks {
+  background-image: url("./assets/projects/topworks.webp");
+}
+.work__thumb--docs {
+  background-image: url("./assets/projects/dokumenty24.webp");
+}
+
 .work__meta {
   padding: 14px 14px 16px;
 }
