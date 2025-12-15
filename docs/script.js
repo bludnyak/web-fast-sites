@@ -89,6 +89,8 @@ const dict = {
     "pricing.li7": "UA/PL/EN",
     "pricing.li8": "Розширене SEO (база)",
     "pricing.li9": "Підключення аналітики",
+    "pricing.li10": "Дрібні правки",
+    "pricing.li11": "Супровід та розвиток сайту",
     "pricing.btn": "Запитати ціну",
     "pricing.btn2": "Хочу Business",
 
@@ -198,6 +200,8 @@ const dict = {
     "pricing.li7": "UA/PL/EN",
     "pricing.li8": "SEO (baza+)",
     "pricing.li9": "Analityka",
+    "pricing.li10": "Drobne poprawki",
+    "pricing.li11": "Wsparcie i rozwój strony",
     "pricing.btn": "Zapytaj o cenę",
     "pricing.btn2": "Chcę Business",
 
@@ -306,6 +310,8 @@ const dict = {
     "pricing.li7": "UA/PL/EN",
     "pricing.li8": "SEO (basic+)",
     "pricing.li9": "Analytics",
+    "pricing.li10": "Minor tweaks",
+    "pricing.li11": "Website support and development",
     "pricing.btn": "Ask for price",
     "pricing.btn2": "Choose Business",
 

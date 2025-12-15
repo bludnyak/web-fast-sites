@@ -531,6 +531,13 @@ h3 {
   background: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 255, 255, 0.18);
 }
+.price__value {
+  margin: 10px 0 6px;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: rgba(120, 200, 255, 0.95); /* неоново-синій */
+}
 .tag {
   position: absolute;
   top: 14px;
