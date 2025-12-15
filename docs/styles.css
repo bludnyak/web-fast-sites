@@ -419,18 +419,13 @@ h3 {
   background: rgba(255, 255, 255, 0.06);
 }
 .work__thumb {
-  height: 160px;
-  display: grid;
-  place-items: center;
-  color: rgba(255, 255, 255, 0.55);
+  position: relative;
+  width: 100%;
+  height: 220px; /* Висота превʼю */
+  background-size: cover; /* 🔑 головне */
+  background-position: center top;
+  background-repeat: no-repeat;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.04),
-    rgba(255, 255, 255, 0.02)
-  );
-  font-weight: 800;
-  letter-spacing: -0.02em;
 }
 /* PROJECT SCREENS */
 .work__thumb--iss {
@@ -455,14 +450,14 @@ h3 {
   font-size: 14px;
   line-height: 1.5;
 }
-.note {
+/*.note {
   margin-top: 14px;
   padding: 12px 14px;
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(0, 0, 0, 0.2);
   color: rgba(255, 255, 255, 0.7);
-}
+} */
 
 /* Cases */
 .grid--cases {
