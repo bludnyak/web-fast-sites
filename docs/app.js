@@ -90,9 +90,11 @@ const I18N = {
     form: {
       name: "Ім’я",
       phone: "Телефон",
-      msg: "Що треба зробити?",
+      msg: "Що потрібно зробити? Напиши, що за бізнес, послуги, мови та приклади сайтів якіподобаються.",
       send: "Відправити",
       note: "* Можеш замінити форму на Formspree / Tally, щоб точно працювало без поштового клієнта.",
+      placeholder:
+        "Що потрібно зробити? Напиши, що за бізнес, послуги, мови та приклади сайтів які подобаються.",
     },
     footer: { up: "Наверх ↑" },
   },
@@ -188,9 +190,11 @@ const I18N = {
     form: {
       name: "Imię",
       phone: "Telefon",
-      msg: "Co trzeba zrobić?",
+      msg: "Napisz, jaki masz biznes, jakie usługi oferujesz, w jakich językach ma być strona oraz podaj przykłady stron, które Ci się podobają.",
       send: "Wyślij",
       note: "* Możesz podpiąć Formspree/Tally, żeby działało bez klienta pocztowego.",
+      placeholder:
+        "Co trzeba zrobić? Napisz, jaka to branża, jakie usługi, w jakich językach ma być strona i podaj przykłady stron, które Ci się podobają.",
     },
     footer: { up: "Do góry ↑" },
   },
@@ -286,9 +290,11 @@ const I18N = {
     form: {
       name: "Name",
       phone: "Phone",
-      msg: "What do you need?",
+      msg: "Tell me about your business, the services you offer, which languages the website should support, and share examples of websites you like.",
       send: "Send",
       note: "* You can connect Formspree/Tally so it works without email client.",
+      placeholder:
+        "What do you need? Tell me about your business, services, required languages, and share examples of websites you like.",
     },
     footer: { up: "Top ↑" },
   },

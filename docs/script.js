@@ -1,6 +1,8 @@
 const $ = (s, p = document) => p.querySelector(s);
 const $$ = (s, p = document) => Array.from(p.querySelectorAll(s));
 
+const SUPPORTED_LANGS = ["ua", "pl", "en"];
+
 const dict = {
   ua: {
     "nav.work": "Роботи",
@@ -115,8 +117,8 @@ const dict = {
     "form.contact": "Контакт",
     "form.msg": "Повідомлення",
     "form.send": "Відправити",
-    "form.hint":
-      "Після натискання відкрию Telegram з готовим текстом (без бекенду).",
+    "form.placeholder":
+      "Що потрібно зробити? Напиши, що за бізнес, послуги, мови та приклади сайтів які подобаються.",
   },
 
   pl: {
@@ -225,7 +227,8 @@ const dict = {
     "form.contact": "Kontakt",
     "form.msg": "Wiadomość",
     "form.send": "Wyślij",
-    "form.hint": "Po kliknięciu otworzę Telegram z gotowym tekstem.",
+    "form.placeholder":
+      "Co trzeba zrobić? Napisz: branża, usługi, języki strony oraz podaj przykłady stron, które Ci się podobają.",
   },
 
   en: {
@@ -335,18 +338,24 @@ const dict = {
     "form.contact": "Contact",
     "form.msg": "Message",
     "form.send": "Send",
-    "form.hint":
-      "After clicking, I’ll open Telegram with a prepared message (no backend).",
+    "form.placeholder":
+      "What do you need? Tell me your business type, services, languages and share examples of websites you like.",
   },
 };
 
+/* ====== LANG HELPERS ====== */
+function normalizeLang(v) {
+  const x = String(v || "")
+    .toLowerCase()
+    .trim();
+  if (x === "uk") return "ua";
+  if (SUPPORTED_LANGS.includes(x)) return x;
+  return null;
+}
+
 function getLangFromUrl() {
   const u = new URL(window.location.href);
-  const q = (u.searchParams.get("lang") || "").toLowerCase();
-  if (q === "ua" || q === "uk") return "ua";
-  if (q === "pl") return "pl";
-  if (q === "en") return "en";
-  return "ua";
+  return normalizeLang(u.searchParams.get("lang"));
 }
 
 function setLangToUrl(lang) {
@@ -355,6 +364,34 @@ function setLangToUrl(lang) {
   window.history.replaceState({}, "", u.toString());
 }
 
+function getLangFromStorage() {
+  return normalizeLang(localStorage.getItem("lang"));
+}
+
+function setLangToStorage(lang) {
+  localStorage.setItem("lang", lang);
+}
+
+function getLangFromBrowser() {
+  const raw = (navigator.language || "").toLowerCase(); // e.g. "pl-PL"
+  const short = raw.slice(0, 2); // "pl"
+  return normalizeLang(short);
+}
+
+/**
+ * Пріоритет:
+ * 1) URL ?lang=
+ * 2) localStorage
+ * 3) browser
+ * 4) ua
+ */
+function getInitialLang() {
+  return (
+    getLangFromUrl() || getLangFromStorage() || getLangFromBrowser() || "ua"
+  );
+}
+
+/* ====== APPLY I18N ====== */
 function applyLang(lang) {
   const table = dict[lang] || dict.ua;
 
@@ -362,24 +399,69 @@ function applyLang(lang) {
   const htmlLang = lang === "ua" ? "uk" : lang;
   document.documentElement.setAttribute("lang", htmlLang);
 
+  // 1) Text / HTML
   $$("[data-i18n]").forEach((el) => {
     const key = el.getAttribute("data-i18n");
     const val = table[key];
-    if (typeof val === "string") {
-      // allow \n in code block area
-      el.textContent = val;
-    }
+    if (typeof val !== "string") return;
+
+    const allowHtml = el.getAttribute("data-i18n-html") === "1";
+    if (allowHtml) el.innerHTML = val;
+    else el.textContent = val;
   });
 
-  $$(".lang__btn").forEach((b) =>
-    b.classList.toggle("is-active", b.dataset.lang === lang)
-  );
+  // 2) Placeholder
+  $$("[data-i18n-placeholder]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-placeholder");
+    const val = table[key];
+    if (typeof val !== "string") return;
+    el.setAttribute("placeholder", val);
+  });
+
+  // 3) Title tooltip
+  $$("[data-i18n-title]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-title");
+    const val = table[key];
+    if (typeof val !== "string") return;
+    el.setAttribute("title", val);
+  });
+
+  // 4) aria-label
+  $$("[data-i18n-aria-label]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-aria-label");
+    const val = table[key];
+    if (typeof val !== "string") return;
+    el.setAttribute("aria-label", val);
+  });
+
+  // 5) href (links)
+  $$("[data-i18n-href]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-href");
+    const val = table[key];
+    if (typeof val !== "string") return;
+    el.setAttribute("href", val);
+  });
+
+  // 6) src (images)
+  $$("[data-i18n-src]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-src");
+    const val = table[key];
+    if (typeof val !== "string") return;
+    el.setAttribute("src", val);
+  });
+
+  // active lang button
+  $$(".lang__btn").forEach((b) => {
+    b.classList.toggle("is-active", b.dataset.lang === lang);
+  });
 }
 
+/* ====== UI SETUPS ====== */
 function setupLangButtons() {
   $$(".lang__btn").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const lang = btn.dataset.lang;
+      const lang = normalizeLang(btn.dataset.lang) || "ua";
+      setLangToStorage(lang);
       setLangToUrl(lang);
       applyLang(lang);
     });
@@ -392,8 +474,8 @@ function setupBurger() {
   if (!burger || !mobile) return;
 
   burger.addEventListener("click", () => {
-    const open = mobile.hasAttribute("hidden") ? false : true;
-    if (open) {
+    const isOpen = !mobile.hasAttribute("hidden");
+    if (isOpen) {
       mobile.setAttribute("hidden", "");
       burger.setAttribute("aria-expanded", "false");
     } else {
@@ -424,8 +506,7 @@ function setupContactSend() {
       `Contact: ${contact || "-"}\n` +
       `Request: ${msg || "-"}`;
 
-    // ВАЖЛИВО: встав сюди свій Telegram username
-    const tgUser = "yourtelegram";
+    const tgUser = "+48662984926";
     const url = `https://t.me/${tgUser}?text=${encodeURIComponent(text)}`;
     window.open(url, "_blank");
   });
@@ -436,8 +517,12 @@ function setYear() {
   if (y) y.textContent = String(new Date().getFullYear());
 }
 
+/* ====== INIT ====== */
 (function init() {
-  const lang = getLangFromUrl();
+  const lang = getInitialLang();
+  // якщо lang не задано в URL — поставимо його, щоб посилання було "копійоване"
+  if (!getLangFromUrl()) setLangToUrl(lang);
+
   applyLang(lang);
   setupLangButtons();
   setupBurger();

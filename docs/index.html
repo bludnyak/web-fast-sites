@@ -529,8 +529,13 @@
 
             <form class="form" onsubmit="return false;">
               <label class="field">
-                <span data-i18n="form.name">Ім’я</span>
-                <input type="text" name="name" placeholder="Name" />
+                <span data-i18n="form.name"></span>
+                <input
+                  type="text"
+                  name="name"
+                  data-i18n-placeholder="form.name"
+                  placeholder=""
+                />
               </label>
               <label class="field">
                 <span data-i18n="form.contact">Контакт</span>
@@ -545,8 +550,7 @@
                 <textarea
                   name="msg"
                   rows="4"
-                  placeholder="Що потрібно зробити? Напиши, що за бізнес, послуги, мови та приклади сайтів які
-                подобаються."
+                  data-i18n-placeholder="form.placeholder"
                 ></textarea>
               </label>
 
